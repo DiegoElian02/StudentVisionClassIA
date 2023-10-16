@@ -4,7 +4,7 @@ from pathlib import Path
 import streamlit_authenticator as stauth
 
 names = ["Diego Elian", "Jose Romo", "Ana Cardenas", "Elias Garza"]
-usernames = ["diegoelian02", "joseromo", "anacardenas", "doctorsexo"]
+usernames = ["diegoelian02", "joseromo", "anacardenas", "eliasgarza"]
 
 passwords = ["mollyamber", "applewatch", "iphone15", "estanzuela"]
 

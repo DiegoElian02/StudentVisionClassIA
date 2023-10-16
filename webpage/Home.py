@@ -12,7 +12,7 @@ st.set_page_config(layout="wide",)
 #--- User auth
         
 names = ["Diego Elian", "Jose Romo", "Ana Cardenas", "Elias Garza"]
-usernames = ["diegoelian02", "joseromo", "anacardenas", "doctorsexo"]
+usernames = ["diegoelian02", "joseromo", "anacardenas", "eliasgarza"]
 
 file_path = Path(__file__).parent / "hashed_pw.pkl"
 with file_path.open("rb") as file:

@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import pandas as pd
 import face_recognition
 import pickle
 from pathlib import Path
@@ -7,15 +8,48 @@ import streamlit_authenticator as stauth
 import matplotlib.pyplot as plt
 import cv2
 from st_pages import Page, Section, add_page_title, show_pages
-
+from deta import Deta
+from datetime import datetime
+import calendar
 # st.set_page_config(layout="wide")
-# Datos ficticios
 
-alumnos = ['Juan', 'Pedro', 'María', 'Perla', 'Diego']
-asistencias = np.random.randint(1, 10, len(alumnos))
-participaciones = np.random.randint(1, 20, len(alumnos))
-dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
-asistencia_por_dia = np.random.randint(5, 20, len(dias))
+DETAKEY = "b0nuscm7yka_pJWqFJMpuzDYxCpuD83GFPQe98mdJjXj"
+deta = Deta(DETAKEY)
+db = deta.Base("grupo1_alumnos")
+db2 = deta.Base("grupo1_asistencia")
+
+def fetch_base():
+    res = db.fetch()
+    return res.items
+
+def get_alumno(key):
+    return db.get(key)
+
+def update_alumno(key, updates):
+    return db.update(key, updates)
+
+def delete_alumno(key):
+    return db.delete(key)
+
+data = list(db2.fetch({}).items)
+
+data = [{**entry, 'day_of_week': calendar.day_name[datetime.strptime(entry['fecha'], "%Y-%m-%d %H:%M:%S").weekday()]} for entry in data]
+
+alumnos = list(set([item['alumno'] for item in data]))
+
+asistencias = []
+for alumno in alumnos:
+    asistencias.append(sum([1 for item in data if item['alumno'] == alumno and item['asistio']]))
+
+participaciones = []
+for alumno in alumnos:
+    participaciones.append(sum([item['participaciones'] for item in data if item['alumno'] == alumno]))
+
+dias = ['monday', 'tuesday', 'wednesday', 'thrusday', 'friday']
+asistencia_por_dia = []
+for dia in dias:
+    asistencia_por_dia.append(sum([1 for item in data if item['day_of_week'].lower() == dia and item['asistio']]))
+
 
 def grafica_asistencias():
     fig, ax = plt.subplots()
@@ -41,15 +75,11 @@ def grafica_participaciones():
 
 col1, col2 = st.columns([2, 1])
 
-# Gráfico de asistencias en la columna 2
 with col2:
     
-    # Gráfico de participaciones en la columna 2
     st.pyplot(grafica_participaciones())
     
-    # Gráfico de asistencia por día en la columna 1
     st.pyplot(grafica_asistencia_por_dia())
     
-# Cámara en tiempo real en la columna 1
 with col1:
     st.pyplot(grafica_asistencias())
