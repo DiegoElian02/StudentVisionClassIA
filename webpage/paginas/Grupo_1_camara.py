@@ -123,7 +123,10 @@ def registo_dia(key: str, estado, fecha, participaciones):
 with col2:
     st.header("Registro de Asistencia")
     for alumno in alumnos:
-        asistio = st.checkbox(f"Asistió {alumno}", value=st.session_state[alumno])
+        if alumno in st.session_state:
+            asistio = st.checkbox(f"Asistió {alumno}", value=st.session_state[alumno])
+        else:
+            asistio = st.checkbox(f"Asistió {alumno}", value=False)
         st.session_state[alumno] = asistio
         if asistio:
             asistencia[alumno]["fecha"] = datetime.now()
