@@ -1,5 +1,8 @@
 # Proyecto de Reconocimiento Facial y Medición de Participación
 
+## Especificaciones de Librerias
+- streamlit-authenticator 0.1.5
+
 ## Descripción
 El objetivo principal de este proyecto es desarrollar un programa que utilice visión de inteligencia artificial para monitorear un salón de clases mediante una cámara. Las principales características del sistema incluyen:
 
