@@ -144,4 +144,4 @@ if st.button("Guardar Asistencia"):
         participaciones = datos["participaciones"]
         if estado:
             registo_dia(alumno,estado,fecha,participaciones)
-    st.success("Asistencia guardada con éxito")
+            st.success("Asistencia guardada con éxito")
