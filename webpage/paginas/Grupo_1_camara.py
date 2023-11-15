@@ -9,11 +9,15 @@ import cv2
 from datetime import datetime
 from deta import Deta
 from st_pages import Page, Section, add_page_title, show_pages
+from google.cloud import storage
+storage_client = storage.Client.from_service_account_json('magnetic-clone-404500-14b2b165bd29.json')
+bucket = storage_client.get_bucket('clases_equipo4')
+
 
 # st.set_page_config(layout="wide")
 #--- User auth
 
-DETAKEY = "b0nuscm7yka_pJWqFJMpuzDYxCpuD83GFPQe98mdJjXj"
+DETAKEY = "b0nuscm7yka_CWJRCsPHdCAkTspwGnHoM7jcg2HPu3Zs"
 deta = Deta(DETAKEY)
 db = deta.Base("grupo1_alumnos")
 db2 = deta.Base("grupo1_asistencia")
@@ -51,7 +55,6 @@ process_this_frame = True
 iter = 0
 reconocidos = set()
 
-
 st.write("Estos son los alumnos del grupo 1 de la clase de inteligencia artificial avanzada:")
 f = fetch_alumnos()
 alumnos = [alumno['nombre'] for alumno in f]
@@ -60,30 +63,28 @@ asistencia = {alumno: {"asistio": False, "fecha": None, "participaciones": 0} fo
 for alumno in reconocidos:
     print(alumno)
     print(asistencia)
-    print("lol?")
     if alumno in asistencia:
         st.session_state[alumno] = True
 
-with col1:
-    # st.write("Cámara en tiempo real:")
-            
-    # run = st.checkbox('Run Webcam')
-    # FRAME_WINDOW = st.empty()
-    # camera = cv2.VideoCapture(0)
-    # while run:
-    #     _, frame = camera.read()
-    #     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    #     FRAME_WINDOW.image(frame)
-    # else:
-    #     st.write('Stopped')
+if 'video_writer' not in st.session_state:
+    st.session_state['video_writer'] = None
 
+with col1:
     st.write("Cámara en tiempo real con deteccion:")
     run = st.checkbox('Run Webcam')
     FRAME_WINDOW = st.empty()
     camera = cv2.VideoCapture(0)
     
+    # Definir el codec e inicializar el objeto VideoWriter
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
     while run:
         _, frame = camera.read()
+        
+        # Inicializar VideoWriter una vez que la cámara comienza a funcionar correctamente
+        if st.session_state['video_writer'] is None:
+            frame_height, frame_width = frame.shape[:2]
+            st.session_state['video_writer'] = cv2.VideoWriter('output.avi', fourcc, 20.0, (frame_width, frame_height))
+        
         if process_this_frame:
             small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
             rgb_small_frame = small_frame
@@ -110,15 +111,23 @@ with col1:
                 for name in face_names:
                     if name!= "Unknown" and name in st.session_state:
                         st.session_state[name] = True
+                        
+        st.session_state['video_writer'].write(frame)
+
+        process_this_frame = True
         # process_this_frame = iter == 0
         # iter = (iter + 1) % 2
         process_this_frame = True
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         FRAME_WINDOW.image(frame)
+    
+    if not run and st.session_state['video_writer'] is not None:
+        st.session_state['video_writer'].release()
+        st.session_state['video_writer'] = None
+    camera.release() 
 
 def registo_dia(key: str, estado, fecha, participaciones):
-    return db2.put({"alumno" : key, "asistio" : estado, "fecha" : fecha, "participaciones": participaciones})
-
+    db2.put({"alumno" : key, "asistio" : estado, "fecha" : fecha, "participaciones": participaciones})
 
 with col2:
     st.header("Registro de Asistencia")
@@ -130,7 +139,6 @@ with col2:
         st.session_state[alumno] = asistio
         if asistio:
             asistencia[alumno]["fecha"] = datetime.now()
-            
 with col3:
     st.header("Número de Participaciones")
     for alumno in alumnos:
@@ -139,9 +147,13 @@ with col3:
 
 if st.button("Guardar Asistencia"):
     for alumno, datos in asistencia.items():
-        estado = True if datos["asistio"] else False
+        # estado = True if datos["asistio"] else False
+        estado = True if st.session_state[alumno] else False
         fecha = datos["fecha"].strftime("%Y-%m-%d %H:%M:%S") if datos["fecha"] else "N/A"
+        
+        blob = bucket.blob(f'uploads/{fecha}.avi')
         participaciones = datos["participaciones"]
         if estado:
             registo_dia(alumno,estado,fecha,participaciones)
-    st.success("Asistencia guardada con éxito")
+            blob.upload_from_filename('output.avi')
+            st.success("Asistencia guardada con éxito")

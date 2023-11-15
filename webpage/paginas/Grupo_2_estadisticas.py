@@ -13,7 +13,7 @@ from datetime import datetime
 import calendar
 # st.set_page_config(layout="wide")
 
-DETAKEY = "b0nuscm7yka_pJWqFJMpuzDYxCpuD83GFPQe98mdJjXj"
+DETAKEY = "b0nuscm7yka_CWJRCsPHdCAkTspwGnHoM7jcg2HPu3Zs"
 deta = Deta(DETAKEY)
 db = deta.Base("grupo2_alumnos")
 db2 = deta.Base("grupo2_asistencia")

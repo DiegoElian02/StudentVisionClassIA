@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "magnetic-clone-404500",
+  "private_key_id": "14b2b165bd2900c18dec07ad67605155af8712f8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDFPFuP388Ll771\nvE7hjZ2sGrBsaxeWTTEbGQjj/Dfa4u8wrRhgYKU9Qznk+fg74TJ5GThSoMzmIbxy\nBymYX7k6vfLE/ck9d4OxKnkUit6U0+8vBPap0VymJir1bQM/UuETZvoDdTD1B2YX\nWsTtH5nhzqxX0hTxLHNM+jC8GTQePOzFQtxhzUCsugJwVs+DGoOuJ+h4YicHcJ7X\nwU95wZAYsRzP5zgdZr+C/fpO+jxO7kG29mqYE90ORXGFpY6xT3ytN1tq+Xd/eWvl\nVxFtizvQATkMN2+ptXMUxuxNkP8uLqqbSNCsVSEfgjKVDRoDcEUK2zTACiy5Uf0S\nOGEm/iZ9AgMBAAECggEAAJRj7TTcGfHoLpPaxodiuyw2apEwmtewmzlCHbU6vNko\nXsXBo7cgMm4nWkWiUqQlgt5MdMpBZig78Vl3NkdqI8bXgXxifUeYydL4/XER5JUp\nSWeqhl5SQtM76wp8QNXI176mdCHUZamy2ortLjAToOlyUBl8vDSDu6tp2tybypbm\nGBZgXRvA59xdQQIPhVlsUWQnRirOEbx48ZnDZYRP+PmSV2w9d6iAizsox76yYiss\nWFP6xlCbsnQS9xGttUcTjVbblPNsOQAGRtNnRejLqaEPIVq+Zs286yeAPe3Q6if8\nrBZlHoikLvDjyBmj4Y36r8CEKqLiCUuBYuyKIk9dmQKBgQD3EWldBJ6XjwTuTqxc\nIAvmlI8OJNsnhIbOxjetT5UuBhDZuqQsWAX5+ZHBIYv46Kt/PBhs5BVvz6IgZHJX\nMJZvZ+9bFxFydYfKS3N4BQmoSzhj9SvhMtlwwHuxqz6V5zFJalMbjdc9iyUcRDk4\nRPSuFI9L5/fSZ+wLGiQxQA9NtQKBgQDMXcECbqAlIwDf+BF7TmvDmJS2TZkif3HD\nTuedMFFfJby58MC99Si6JYVdjFmtmh5ufPkgT4PQpkiMNqHHJTOPTQmi2l+wt2CX\ndoMJwjeORyx845fgVlPKSSbC03KPl/gLHU7Mvur9Qvui9xAkLyy/Kd0eVTSjlVpV\neJpm/uyyqQKBgGFT2ZbMEBGSRJYAJgPwl9+QnD4tJKwPl+9yxFIgrJrBxveOf8f8\nMPaFavaS2YoHVi+8I78ZppwyRiLOjwBr4ocmgXL3xma5h/GYAXfBPEmwwBkYZt3C\n40d4fAHEfNYeihrqqKyNFsJmwwq8kXHqMB03ei+jxMt9Js5E0QcZvi2VAoGAOrl2\nDMzdF87HIZSW8WfHb50YnooNxuv4NLcntvN7bmvZn1SfDfa0jUja2dbKrifrNrSS\nocY3im09y4ynUCJQfo0Uh8dYV99Z0iwr21IDxM6O6hQ8QCqOSUJb8P/xm3F/xTHW\nwt7Zh40H4fw8lyk3IndVIrI5PghcvNK7C32VZoECgYEAumZckZEZXqFUtWgpPq9O\nb1V/yRjhE7ncoyv0luaunLPHtFteCOzzwmBOOO7k7P1MF6H/7BWEemB2D5u2SCcH\nXU2bj18+BbMjVd9liiDEh/71ortJOHe6u5Dj1xQCrC8OrwIDqWzKeN8+JwTHVYSV\nybrm9NHKke/Iq7oNH7DIPro=\n-----END PRIVATE KEY-----\n",
+  "client_email": "pruebasequipo4@magnetic-clone-404500.iam.gserviceaccount.com",
+  "client_id": "104667941014089560405",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pruebasequipo4%40magnetic-clone-404500.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

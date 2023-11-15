@@ -6,7 +6,7 @@ st.title("Inteligencia artificial avanzada I")
 # if "lista_alumnos" not in st.session_state:
 #     st.session_state.lista_alumnos = ["Diego Rodriguez (21 años)", "Ana Cardenas (21 años)", "Jose Romo (22 años)"]
 
-DETAKEY = "b0nuscm7yka_pJWqFJMpuzDYxCpuD83GFPQe98mdJjXj"
+DETAKEY = "b0nuscm7yka_CWJRCsPHdCAkTspwGnHoM7jcg2HPu3Zs"
 deta = Deta(DETAKEY)
 
 db = deta.Base("grupo2_alumnos")
