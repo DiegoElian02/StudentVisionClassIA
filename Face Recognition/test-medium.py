@@ -65,6 +65,7 @@ while True:
             name = "Unknown"
 
             # # If a match was found in known_face_encodings, just use the first one.
+            
             # if True in matches:
             #     first_match_index = matches.index(True)
             #     name = known_face_names[first_match_index]
@@ -78,7 +79,7 @@ while True:
             face_names.append(name)
 
     process_this_frame = iter == 0
-    iter = (iter + 1) % 4
+    iter = (iter + 1) % 2
 
 
     # Display the results
