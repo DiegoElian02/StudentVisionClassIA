@@ -96,7 +96,6 @@ def count_participations(video_path:str, known_faces_dir:str, fps:float= 30/4, d
 
         results = model.predict(frame, conf=0.65, show=False)
         no_show_frame = frame.copy()
-        # frame = results[0].plot(boxes=True)   
         
         if results[0]: # Verificar si hay detecciones
             for person in results[0]: # Recorrer la lista de objetos (Personas) detectados
@@ -107,13 +106,11 @@ def count_participations(video_path:str, known_faces_dir:str, fps:float= 30/4, d
                     last_recog_time = time
 
                     left_up, right_down = _look4face(keypoints)
-                    # cv2.rectangle(frame, left_up, right_down, (255, 0, 0), 3)
                     face = no_show_frame[left_up[1]:right_down[1], right_down[0]:left_up[0]]
                     
                     # Convert the cropped face to RGB
                     face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)    
-                    # cv2.imwrite('Face.jpg', face)
-                    
+
                     face_name = _recognize_face(face)
                     
                     if face_name != 'Unknown':
