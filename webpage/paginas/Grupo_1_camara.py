@@ -73,7 +73,7 @@ with col1:
     st.write("Cámara en tiempo real con deteccion:")
     run = st.checkbox('Run Webcam')
     FRAME_WINDOW = st.empty()
-    camera = cv2.VideoCapture(0)
+    camera = cv2.VideoCapture(-1)
     
     # Definir el codec e inicializar el objeto VideoWriter
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
