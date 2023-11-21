@@ -8,7 +8,7 @@ pathlib
 google-cloud
 matplotlib
 streamlit-authenticator == 0.1.5
-opencv-python
+opencv-python-headless
 deta
 st-pages
 torch
