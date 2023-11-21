@@ -15,7 +15,7 @@ from pydantic import BaseModel
 
 # st.set_page_config(layout="wide")
 #--- User auth
-
+#polloloco
 DETAKEY = "b0nuscm7yka_CWJRCsPHdCAkTspwGnHoM7jcg2HPu3Zs"
 deta = Deta(DETAKEY)
 db = deta.Base("grupo2_alumnos")
