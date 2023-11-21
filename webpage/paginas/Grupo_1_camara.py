@@ -10,9 +10,14 @@ from datetime import datetime
 from deta import Deta
 from st_pages import Page, Section, add_page_title, show_pages
 from google.cloud import storage
+from streamlit_webrtc import webrtc_streamer, RTCConfiguration
 storage_client = storage.Client.from_service_account_json('webpage/magnetic-clone-404500-14b2b165bd29.json')
 bucket = storage_client.get_bucket('clases_equipo4')
 
+
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+)
 
 # st.set_page_config(layout="wide")
 #--- User auth
@@ -74,12 +79,12 @@ with col1:
     run = st.checkbox('Run Webcam')
     FRAME_WINDOW = st.empty()
     # camera = cv2.VideoCapture(-1)
-    video_source = st.webrtc_video_source(width=640, height=480)
+    webrtc_ctx = webrtc_streamer(key="example", rtc_configuration=RTC_CONFIGURATION)
 
     ### Streamlit WebRTC API to capture video stream from webcam
     # fourcc = cv2.VideoWriter_fourcc(*'XVID')
     while run:
-        frame = video_source.frame
+        frame = webrtc_ctx.video_receiver.get_frame()
         # _, frame = camera.read()
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         # Inicializar VideoWriter una vez que la cámara comienza a funcionar correctamente
@@ -121,7 +126,8 @@ with col1:
         # iter = (iter + 1) % 2
         process_this_frame = True
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        FRAME_WINDOW.image(frame)
+        webrtc_ctx.video_frame_transmitter.transmit(frame)
+        # FRAME_WINDOW.image(frame)
     
     if not run and st.session_state['video_writer'] is not None:
         st.session_state['video_writer'].release()
