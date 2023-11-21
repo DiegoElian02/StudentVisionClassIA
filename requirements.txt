@@ -1,8 +1,7 @@
 streamlit
 numpy
 pandas
-dlib-bin
-face-recognition
+face_recognition @ git+https://github.com/thetoby9944/face_recognition 
 
 
 pathlib
