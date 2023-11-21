@@ -5,7 +5,7 @@ face_recognition @ git+https://github.com/thetoby9944/face_recognition
 
 
 pathlib
-google-cloud
+google-cloud-storage
 matplotlib
 streamlit-authenticator == 0.1.5
 opencv-python-headless
