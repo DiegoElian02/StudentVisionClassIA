@@ -1,0 +1,19 @@
+streamlit
+numpy
+pandas
+dlib-bin
+face-recognition
+
+pickle
+pathlib
+google-cloud
+matplotlib
+streamlit-authenticator == 0.1.5
+opencv-python
+deta
+st-pages
+torch
+torchvision
+torchaudio
+ultralytics
+pydantic

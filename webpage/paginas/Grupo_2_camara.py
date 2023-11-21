@@ -12,6 +12,7 @@ from st_pages import Page, Section, add_page_title, show_pages
 from ultralytics import YOLO
 from pydantic import BaseModel
 
+
 # st.set_page_config(layout="wide")
 #--- User auth
 
