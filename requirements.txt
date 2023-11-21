@@ -1,10 +1,11 @@
 streamlit
 numpy
+pickle
 pandas
 dlib-bin
 face-recognition
 
-pickle
+
 pathlib
 google-cloud
 matplotlib
