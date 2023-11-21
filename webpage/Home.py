@@ -28,7 +28,7 @@ if authentication_status == False:
 
 if authentication_status == None:
     st.warning("Please enter your username and password")
-    show_pages([Page("Home.py", "Home", "🏠")])
+    show_pages([Page("webpage/Home.py", "Home", "🏠")])
     
 if authentication_status == True:
     if name == "Diego Elian":
