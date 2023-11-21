@@ -1,6 +1,5 @@
 streamlit
 numpy
-pickle
 pandas
 dlib-bin
 face-recognition
