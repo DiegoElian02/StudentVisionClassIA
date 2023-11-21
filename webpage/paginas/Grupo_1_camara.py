@@ -42,7 +42,7 @@ known_face_encodings = []
 known_face_names = []
 
 for person in list_files_in_folder('webpage/known_faces'):
-    face = face_recognition.load_image_file(f"known_faces/{person}")
+    face = face_recognition.load_image_file(f"webpage/known_faces/{person}")
     face_face_encoding = face_recognition.face_encodings(face)[0]
         
     known_face_encodings.append(face_face_encoding)
