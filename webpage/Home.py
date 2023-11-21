@@ -34,15 +34,15 @@ if authentication_status == True:
     if name == "Diego Elian":
         show_pages(
             [
-                Page("Home.py", "Home", "🏠"),
-                Page("paginas/Grupo_1.py", "Grupo 1", "🏠"),
+                Page("webpage/Home.py", "Home", "🏠"),
+                Page("webpage/paginas/Grupo_1.py", "Grupo 1", "🏠"),
                 # Can use :<icon-name>: or the actual icon
                 Page("paginas/Grupo_1_estadisticas.py", "Grupo 1 estadísticas", ":books:"),
                 # Since this is a Section, all the pages underneath it will be indented
                 # The section itself will look like a normal page, but it won't be clickable
                 # Section(name="Cool apps", icon=":pig:"),
                 # The pages appear in the order you pass them
-                Page("paginas/Grupo_1_camara.py", "Grupo 1 camara", "📖"),
+                Page("webpage/paginas/Grupo_1_camara.py", "Grupo 1 camara", "📖"),
                 # Page("example_app/example_two.py", "Example Two", "✏️"),
                 # Section(name="Other apps", icon=":horse:"),
                 # # Will use the default icon and name based on the filename if you don't
@@ -56,15 +56,15 @@ if authentication_status == True:
     if name == "Elias Garza":
         show_pages(
             [   
-                Page("Home.py", "Home", "🏠"),
-                Page("paginas/Grupo_2.py", "Grupo 2", "🏠"),
+                Page("webpage/Home.py", "Home", "🏠"),
+                Page("webpage/paginas/Grupo_2.py", "Grupo 2", "🏠"),
                 # Can use :<icon-name>: or the actual icon
-                Page("paginas/Grupo_2_estadisticas.py", "Grupo 2 estadísticas", ":books:"),
+                Page("webpage/paginas/Grupo_2_estadisticas.py", "Grupo 2 estadísticas", ":books:"),
                 # Since this is a Section, all the pages underneath it will be indented
                 # The section itself will look like a normal page, but it won't be clickable
                 # Section(name="Cool apps", icon=":pig:"),
                 # The pages appear in the order you pass them
-                Page("paginas/Grupo_2_camara.py", "Grupo 2 camara", "📖"),
+                Page("webpage/paginas/Grupo_2_camara.py", "Grupo 2 camara", "📖"),
                 # Page("example_app/example_two.py", "Example Two", "✏️"),
                 # Section(name="Other apps", icon=":horse:"),
                 # # Will use the default icon and name based on the filename if you don't
