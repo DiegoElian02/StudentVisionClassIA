@@ -73,17 +73,19 @@ with col1:
     st.write("Cámara en tiempo real con deteccion:")
     run = st.checkbox('Run Webcam')
     FRAME_WINDOW = st.empty()
-    camera = cv2.VideoCapture(-1)
-    
-    # Definir el codec e inicializar el objeto VideoWriter
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    # camera = cv2.VideoCapture(-1)
+    video_source = st.webrtc_video_source(width=640, height=480)
+
+    ### Streamlit WebRTC API to capture video stream from webcam
+    # fourcc = cv2.VideoWriter_fourcc(*'XVID')
     while run:
-        _, frame = camera.read()
-        
+        frame = video_source.frame
+        # _, frame = camera.read()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         # Inicializar VideoWriter una vez que la cámara comienza a funcionar correctamente
-        if st.session_state['video_writer'] is None:
-            frame_height, frame_width = frame.shape[:2]
-            st.session_state['video_writer'] = cv2.VideoWriter('webpage/output.avi', fourcc, 20.0, (frame_width, frame_height))
+        # if st.session_state['video_writer'] is None:
+        #     frame_height, frame_width = frame.shape[:2]
+        #     st.session_state['video_writer'] = cv2.VideoWriter('webpage/output.avi', fourcc, 20.0, (frame_width, frame_height))
         
         if process_this_frame:
             small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
@@ -124,7 +126,7 @@ with col1:
     if not run and st.session_state['video_writer'] is not None:
         st.session_state['video_writer'].release()
         st.session_state['video_writer'] = None
-    camera.release() 
+    # camera.release() 
 
 def registo_dia(key: str, estado, fecha, participaciones):
     db2.put({"alumno" : key, "asistio" : estado, "fecha" : fecha, "participaciones": participaciones})
