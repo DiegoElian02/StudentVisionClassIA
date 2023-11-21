@@ -10,7 +10,7 @@ from datetime import datetime
 from deta import Deta
 from st_pages import Page, Section, add_page_title, show_pages
 from google.cloud import storage
-storage_client = storage.Client.from_service_account_json('magnetic-clone-404500-14b2b165bd29.json')
+storage_client = storage.Client.from_service_account_json('webpage/magnetic-clone-404500-14b2b165bd29.json')
 bucket = storage_client.get_bucket('clases_equipo4')
 
 
@@ -83,7 +83,7 @@ with col1:
         # Inicializar VideoWriter una vez que la cámara comienza a funcionar correctamente
         if st.session_state['video_writer'] is None:
             frame_height, frame_width = frame.shape[:2]
-            st.session_state['video_writer'] = cv2.VideoWriter('output.avi', fourcc, 20.0, (frame_width, frame_height))
+            st.session_state['video_writer'] = cv2.VideoWriter('webpage/output.avi', fourcc, 20.0, (frame_width, frame_height))
         
         if process_this_frame:
             small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
@@ -155,5 +155,5 @@ if st.button("Guardar Asistencia"):
         participaciones = datos["participaciones"]
         if estado:
             registo_dia(alumno,estado,fecha,participaciones)
-            blob.upload_from_filename('output.avi')
+            blob.upload_from_filename('webpage/output.avi')
             st.success("Asistencia guardada con éxito")
