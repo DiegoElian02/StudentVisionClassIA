@@ -7,19 +7,26 @@ from pathlib import Path
 import streamlit_authenticator as stauth
 import matplotlib.pyplot as plt
 import cv2
+from typing import List
 import av
+import queue
 from datetime import datetime
 from deta import Deta
+from streamlit_server_state import server_state, server_state_lock
 from st_pages import Page, Section, add_page_title, show_pages
 from google.cloud import storage
-from streamlit_webrtc import webrtc_streamer, RTCConfiguration
+from streamlit_webrtc import (
+    VideoProcessorBase,
+    WebRtcMode,
+    WebRtcStreamerContext,
+    create_mix_track,
+    create_process_track,
+    webrtc_streamer,
+)
+from sample_utils.turn import get_ice_servers
+
 storage_client = storage.Client.from_service_account_json('webpage/magnetic-clone-404500-14b2b165bd29.json')
 bucket = storage_client.get_bucket('clases_equipo4')
-
-
-RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-)
 
 # st.set_page_config(layout="wide")
 #--- User auth
@@ -73,15 +80,29 @@ for alumno in reconocidos:
     if alumno in asistencia:
         st.session_state[alumno] = True
 
-if 'video_writer' not in st.session_state:
-    st.session_state['video_writer'] = None
+# if 'video_writer' not in st.session_state:
+#     st.session_state['video_writer'] = None
 
-def video_frame_callback(frame):
-    img = frame.to_ndarray(format="bgr24")
-    with lock:
-        img_container["img"] = img
-    return frame
-    
+result_queue = queue.Queue()
+
+
+def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
+    image = frame.to_ndarray(format="bgr24")
+    small_frame = cv2.resize(image, (0, 0), fx=0.25, fy=0.25)
+    face_locations = face_recognition.face_locations(small_frame)
+    face_encodings = face_recognition.face_encodings(face_locations, face_locations)
+    face_names = []
+    for face_encoding in face_encodings:
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            name = "Unknown"
+            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+            if matches[best_match_index]:
+                name = known_face_names[best_match_index]
+            face_names.append(name) 
+    result_queue.put(name)
+    return av.VideoFrame.from_ndarray(image, format="bgr24")
+
     # if True:
     #     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
     #     rgb_small_frame = small_frame
@@ -114,21 +135,32 @@ def video_frame_callback(frame):
 lock = threading.Lock()
 img_container = {"img": None}
 
+caras=[]
+
 with col1:
-    ctx = webrtc_streamer(key="example", video_frame_callback=video_frame_callback)
-    fig_place = st.empty()
-    fig, ax = plt.subplots(1, 1)
-    # flip = st.checkbox("Flip")
+    webrtc_ctx = webrtc_streamer(
+    key="object-detection",
+    mode=WebRtcMode.SENDRECV,
+    rtc_configuration={"iceServers": get_ice_servers()},
+    video_frame_callback=video_frame_callback,
+    media_stream_constraints={"video": True, "audio": False},
+    async_processing=True,
+    )
     
-    while ctx.state.playing:
-        with lock:
-            img = img_container["img"]
-        if img is None:
-            continue
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        ax.cla()
-        ax.hist(gray.ravel(), 256, [0, 256])
-        fig_place.pyplot(fig)
+    # if st.checkbox("Show the detected labels", value=True):
+    #     if (webrtc_ctx.state.playing == False):
+    #         for i in range(result_queue.qsize()):
+    #             caras.append(result_queue.get())
+    # while ctx.state.playing:
+    #     print("jeje")
+        # with lock:
+        #     img = img_container["img"]
+        # if img is None:
+        #     continue
+        # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # ax.cla()
+        # ax.hist(gray.ravel(), 256, [0, 256])
+        # fig_place.pyplot(fig)
         
         # small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         # rgb_small_frame = small_frame

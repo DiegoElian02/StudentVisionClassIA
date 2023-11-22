@@ -3,6 +3,9 @@ numpy
 pandas
 face_recognition @ git+https://github.com/thetoby9944/face_recognition 
 
+sampling-utils
+typing
+streamlit-server-state
 threading
 av
 streamlit-webrtc
