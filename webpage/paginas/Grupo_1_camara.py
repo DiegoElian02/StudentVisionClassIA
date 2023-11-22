@@ -147,8 +147,9 @@ with col1:
     )
     
     if webrtc_ctx.state.playing:
-        for i in range(result_queue.qsize()):
-            caras.append(result_queue.get())
+        print("nose")
+        # for i in range(result_queue.qsize()):
+        #     caras.append(result_queue.get())
     for c in caras:
         st.markdown(f"- {c}")
     
