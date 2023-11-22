@@ -119,7 +119,7 @@ def video_frame_callback(frame):
 with col1:
     ctx = webrtc_streamer(key="example", video_frame_callback=video_frame_callback)
     fig_place = st.empty()
-    fig, ax = plt.subplots(1, 1)
+    # fig, ax = plt.subplots(1, 1)
     # flip = st.checkbox("Flip")
     
     while ctx.state.playing:
@@ -127,22 +127,24 @@ with col1:
             frame = img_container["img"]
         if frame is None:
             continue
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-        rgb_small_frame = small_frame
-        face_locations = face_recognition.face_locations(rgb_small_frame)
-        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
-        face_names = []
-        for face_encoding in face_encodings:
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-            name = "Unknown"
-            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
-                name = known_face_names[best_match_index]
-            face_names.append(name)
-        for name in face_names:
-            if name!= "Unknown" and name in st.session_state:
-                st.session_state[name] = True
+        print("polloloco")
+        
+        # small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        # rgb_small_frame = small_frame
+        # face_locations = face_recognition.face_locations(rgb_small_frame)
+        # face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+        # face_names = []
+        # for face_encoding in face_encodings:
+        #     matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+        #     name = "Unknown"
+        #     face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+        #     best_match_index = np.argmin(face_distances)
+        #     if matches[best_match_index]:
+        #         name = known_face_names[best_match_index]
+        #     face_names.append(name)
+        # for name in face_names:
+        #     if name!= "Unknown" and name in st.session_state:
+        #         st.session_state[name] = True
         
         
     # st.write("Cámara en tiempo real con deteccion:")
