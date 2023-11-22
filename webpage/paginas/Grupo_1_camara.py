@@ -120,7 +120,7 @@ with col1:
     ctx = webrtc_streamer(key="example", video_frame_callback=video_frame_callback)
     fig_place = st.empty()
     fig, ax = plt.subplots(1, 1)
-    flip = st.checkbox("Flip")
+    # flip = st.checkbox("Flip")
     
     while ctx.state.playing:
         with lock:
