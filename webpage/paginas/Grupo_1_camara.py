@@ -115,7 +115,7 @@ lock = threading.Lock()
 img_container = {"img": None}
 
 with col1:
-    ctx = webrtc_streamer(key="example", client_settings= RTC_CONFIGURATION, video_frame_callback=video_frame_callback)
+    ctx = webrtc_streamer(key="example", video_frame_callback=video_frame_callback)
     fig_place = st.empty()
     fig, ax = plt.subplots(1, 1)
     # flip = st.checkbox("Flip")
