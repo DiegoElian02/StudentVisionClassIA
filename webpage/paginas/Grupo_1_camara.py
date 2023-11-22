@@ -86,6 +86,7 @@ with col1:
     while run:
         frame = webrtc_ctx.video_receiver.get_frame()
         # _, frame = camera.read()
+        print(frame)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         # Inicializar VideoWriter una vez que la cámara comienza a funcionar correctamente
         # if st.session_state['video_writer'] is None:
