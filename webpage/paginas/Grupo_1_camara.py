@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import face_recognition
 import pickle
-import threading
+# import threading
 from pathlib import Path
 import streamlit_authenticator as stauth
 import matplotlib.pyplot as plt
@@ -132,8 +132,8 @@ def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
 
     # return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
-lock = threading.Lock()
-img_container = {"img": None}
+# lock = threading.Lock()
+# img_container = {"img": None}
 
 caras=[]
 
