@@ -17,9 +17,6 @@ storage_client = storage.Client.from_service_account_json('webpage/magnetic-clon
 bucket = storage_client.get_bucket('clases_equipo4')
 
 
-lock = threading.Lock()
-img_container = {"img": None}
-
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
@@ -114,20 +111,24 @@ def video_frame_callback(frame):
 
     # return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
-
+lock = threading.Lock()
+img_container = {"img": None}
 
 with col1:
-    ctx = webrtc_streamer(key="example", video_frame_callback=video_frame_callback)
+    ctx = webrtc_streamer(key="example", client_settings= RTC_CONFIGURATION, video_frame_callback=video_frame_callback)
     fig_place = st.empty()
-    # fig, ax = plt.subplots(1, 1)
+    fig, ax = plt.subplots(1, 1)
     # flip = st.checkbox("Flip")
     
     while ctx.state.playing:
         with lock:
-            frame = img_container["img"]
-        if frame is None:
+            img = img_container["img"]
+        if img is None:
             continue
-        print("polloloco")
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        ax.cla()
+        ax.hist(gray.ravel(), 256, [0, 256])
+        fig_place.pyplot(fig)
         
         # small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         # rgb_small_frame = small_frame
