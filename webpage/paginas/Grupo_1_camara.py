@@ -146,6 +146,14 @@ with col1:
     async_processing=True,
     )
     
+    if st.checkbox("Show the detected labels", value=True):
+        if webrtc_ctx.state.playing:
+            labels_placeholder = st.empty() 
+            while True:
+                result = result_queue.get()
+                labels_placeholder.table(result)
+
+    
     # if st.checkbox("Show the detected labels", value=True):
     #     if (webrtc_ctx.state.playing == False):
     #         for i in range(result_queue.qsize()):
