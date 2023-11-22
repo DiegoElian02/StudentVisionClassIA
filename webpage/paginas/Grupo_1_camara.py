@@ -76,14 +76,14 @@ if 'video_writer' not in st.session_state:
 
 with col1:
     st.write("Cámara en tiempo real con deteccion:")
-    run = st.checkbox('Run Webcam')
+    # run = st.checkbox('Run Webcam')
     FRAME_WINDOW = st.empty()
     # camera = cv2.VideoCapture(-1)
     webrtc_ctx = webrtc_streamer(key="example", rtc_configuration=RTC_CONFIGURATION)
 
     ### Streamlit WebRTC API to capture video stream from webcam
     # fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    while run:
+    while True:
         frame = webrtc_ctx.video_receiver.get_frame()
         # _, frame = camera.read()
         print(frame)
