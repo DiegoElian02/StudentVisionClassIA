@@ -23,7 +23,6 @@ from streamlit_webrtc import (
     create_process_track,
     webrtc_streamer,
 )
-from sample_utils.turn import get_ice_servers
 
 storage_client = storage.Client.from_service_account_json('webpage/magnetic-clone-404500-14b2b165bd29.json')
 bucket = storage_client.get_bucket('clases_equipo4')
@@ -141,7 +140,7 @@ with col1:
     webrtc_ctx = webrtc_streamer(
     key="object-detection",
     mode=WebRtcMode.SENDRECV,
-    rtc_configuration={"iceServers": get_ice_servers()},
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
     video_frame_callback=video_frame_callback,
     media_stream_constraints={"video": True, "audio": False},
     async_processing=True,
