@@ -76,40 +76,45 @@ if 'video_writer' not in st.session_state:
     st.session_state['video_writer'] = None
 
 def callback(frame):
-    frame = frame.to_ndarray(format="bgr24")
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    
-    if True:
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-        rgb_small_frame = small_frame
-        face_locations = face_recognition.face_locations(rgb_small_frame)
-        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
-        face_names = []
-        for face_encoding in face_encodings:
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-            name = "Unknown"
-            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
-                name = known_face_names[best_match_index]
-            face_names.append(name) 
-        for (top, right, bottom, left), name in zip(face_locations, face_names):
-            top *= 4
-            right *= 4
-            bottom *= 4
-            left *= 4
-            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-            font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-            for name in face_names:
-                if name!= "Unknown" and name in st.session_state:
-                    st.session_state[name] = True
+    img = frame.to_ndarray(format="bgr24")
 
-    return av.VideoFrame.from_ndarray(frame, format="bgr24")
+    flipped = img[::-1,:,:] if flip else img
+
+    return av.VideoFrame.from_ndarray(flipped, format="bgr24")
+    # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    
+    # if True:
+    #     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    #     rgb_small_frame = small_frame
+    #     face_locations = face_recognition.face_locations(rgb_small_frame)
+    #     face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+    #     face_names = []
+    #     for face_encoding in face_encodings:
+    #         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    #         name = "Unknown"
+    #         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+    #         best_match_index = np.argmin(face_distances)
+    #         if matches[best_match_index]:
+    #             name = known_face_names[best_match_index]
+    #         face_names.append(name) 
+    #     for (top, right, bottom, left), name in zip(face_locations, face_names):
+    #         top *= 4
+    #         right *= 4
+    #         bottom *= 4
+    #         left *= 4
+    #         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+    #         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+    #         font = cv2.FONT_HERSHEY_DUPLEX
+    #         cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+    #         for name in face_names:
+    #             if name!= "Unknown" and name in st.session_state:
+    #                 st.session_state[name] = True
+
+    # return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
 
 with col1:
+    flip = st.checkbox("Flip")
     webrtc_ctx = webrtc_streamer(key="example", rtc_configuration=RTC_CONFIGURATION, video_frame_callback= callback)
     # st.write("Cámara en tiempo real con deteccion:")
     # # run = st.checkbox('Run Webcam')
