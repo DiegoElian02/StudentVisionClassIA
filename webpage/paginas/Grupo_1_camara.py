@@ -6,6 +6,7 @@ from pathlib import Path
 import streamlit_authenticator as stauth
 import matplotlib.pyplot as plt
 import cv2
+import av
 from datetime import datetime
 from deta import Deta
 from st_pages import Page, Section, add_page_title, show_pages
@@ -74,66 +75,101 @@ for alumno in reconocidos:
 if 'video_writer' not in st.session_state:
     st.session_state['video_writer'] = None
 
-with col1:
-    st.write("Cámara en tiempo real con deteccion:")
-    # run = st.checkbox('Run Webcam')
-    FRAME_WINDOW = st.empty()
-    # camera = cv2.VideoCapture(-1)
-    webrtc_ctx = webrtc_streamer(key="example", rtc_configuration=RTC_CONFIGURATION)
-
-    ### Streamlit WebRTC API to capture video stream from webcam
-    # fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    while webrtc_ctx:
-        frame = webrtc_ctx.video_receiver.get_frame()
-        # _, frame = camera.read()
-        print(frame)
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        # Inicializar VideoWriter una vez que la cámara comienza a funcionar correctamente
-        # if st.session_state['video_writer'] is None:
-        #     frame_height, frame_width = frame.shape[:2]
-        #     st.session_state['video_writer'] = cv2.VideoWriter('webpage/output.avi', fourcc, 20.0, (frame_width, frame_height))
-        
-        if process_this_frame:
-            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-            rgb_small_frame = small_frame
-            face_locations = face_recognition.face_locations(rgb_small_frame)
-            face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
-            face_names = []
-            for face_encoding in face_encodings:
-                matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-                name = "Unknown"
-                face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-                best_match_index = np.argmin(face_distances)
-                if matches[best_match_index]:
-                    name = known_face_names[best_match_index]
-                face_names.append(name) 
-            for (top, right, bottom, left), name in zip(face_locations, face_names):
-                top *= 4
-                right *= 4
-                bottom *= 4
-                left *= 4
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-                font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-                for name in face_names:
-                    if name!= "Unknown" and name in st.session_state:
-                        st.session_state[name] = True
-                        
-        st.session_state['video_writer'].write(frame)
-
-        process_this_frame = True
-        # process_this_frame = iter == 0
-        # iter = (iter + 1) % 2
-        process_this_frame = True
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        webrtc_ctx.video_frame_transmitter.transmit(frame)
-        # FRAME_WINDOW.image(frame)
+def callback(frame):
+    frame = frame.to_ndarray(format="bgr24")
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
-    if not run and st.session_state['video_writer'] is not None:
-        st.session_state['video_writer'].release()
-        st.session_state['video_writer'] = None
-    # camera.release() 
+    if True:
+        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        rgb_small_frame = small_frame
+        face_locations = face_recognition.face_locations(rgb_small_frame)
+        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+        face_names = []
+        for face_encoding in face_encodings:
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            name = "Unknown"
+            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+            if matches[best_match_index]:
+                name = known_face_names[best_match_index]
+            face_names.append(name) 
+        for (top, right, bottom, left), name in zip(face_locations, face_names):
+            top *= 4
+            right *= 4
+            bottom *= 4
+            left *= 4
+            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+            font = cv2.FONT_HERSHEY_DUPLEX
+            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+            for name in face_names:
+                if name!= "Unknown" and name in st.session_state:
+                    st.session_state[name] = True
+
+    return av.VideoFrame.from_ndarray(frame, format="bgr24")
+
+
+with col1:
+    webrtc_ctx = webrtc_streamer(key="example", rtc_configuration=RTC_CONFIGURATION, video_frame_callback= callback)
+    # st.write("Cámara en tiempo real con deteccion:")
+    # # run = st.checkbox('Run Webcam')
+    # FRAME_WINDOW = st.empty()
+    # # camera = cv2.VideoCapture(-1)
+    # webrtc_ctx = webrtc_streamer(key="example", rtc_configuration=RTC_CONFIGURATION)
+
+    # ### Streamlit WebRTC API to capture video stream from webcam
+    # # fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    # while webrtc_ctx:
+    #     frame = webrtc_ctx.video_receiver.get_frame()
+    #     # _, frame = camera.read()
+    #     print(frame)
+    #     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #     # Inicializar VideoWriter una vez que la cámara comienza a funcionar correctamente
+    #     # if st.session_state['video_writer'] is None:
+    #     #     frame_height, frame_width = frame.shape[:2]
+    #     #     st.session_state['video_writer'] = cv2.VideoWriter('webpage/output.avi', fourcc, 20.0, (frame_width, frame_height))
+        
+    #     if process_this_frame:
+    #         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    #         rgb_small_frame = small_frame
+    #         face_locations = face_recognition.face_locations(rgb_small_frame)
+    #         face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+    #         face_names = []
+    #         for face_encoding in face_encodings:
+    #             matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    #             name = "Unknown"
+    #             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+    #             best_match_index = np.argmin(face_distances)
+    #             if matches[best_match_index]:
+    #                 name = known_face_names[best_match_index]
+    #             face_names.append(name) 
+    #         for (top, right, bottom, left), name in zip(face_locations, face_names):
+    #             top *= 4
+    #             right *= 4
+    #             bottom *= 4
+    #             left *= 4
+    #             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+    #             cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+    #             font = cv2.FONT_HERSHEY_DUPLEX
+    #             cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+    #             for name in face_names:
+    #                 if name!= "Unknown" and name in st.session_state:
+    #                     st.session_state[name] = True
+                        
+    #     st.session_state['video_writer'].write(frame)
+
+    #     process_this_frame = True
+    #     # process_this_frame = iter == 0
+    #     # iter = (iter + 1) % 2
+    #     process_this_frame = True
+    #     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #     webrtc_ctx.video_frame_transmitter.transmit(frame)
+    #     # FRAME_WINDOW.image(frame)
+    
+    # if not run and st.session_state['video_writer'] is not None:
+    #     st.session_state['video_writer'].release()
+    #     st.session_state['video_writer'] = None
+    # # camera.release() 
 
 def registo_dia(key: str, estado, fecha, participaciones):
     db2.put({"alumno" : key, "asistio" : estado, "fecha" : fecha, "participaciones": participaciones})

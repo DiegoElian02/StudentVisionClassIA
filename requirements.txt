@@ -3,6 +3,7 @@ numpy
 pandas
 face_recognition @ git+https://github.com/thetoby9944/face_recognition 
 
+av
 streamlit-webrtc
 pathlib
 google-cloud-storage
