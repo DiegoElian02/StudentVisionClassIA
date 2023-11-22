@@ -83,7 +83,7 @@ with col1:
 
     ### Streamlit WebRTC API to capture video stream from webcam
     # fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    while True:
+    while webrtc_ctx:
         frame = webrtc_ctx.video_receiver.get_frame()
         # _, frame = camera.read()
         print(frame)
