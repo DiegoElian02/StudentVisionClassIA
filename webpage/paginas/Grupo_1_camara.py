@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import face_recognition
 import pickle
+import threading
 from pathlib import Path
 import streamlit_authenticator as stauth
 import matplotlib.pyplot as plt
@@ -15,6 +16,9 @@ from streamlit_webrtc import webrtc_streamer, RTCConfiguration
 storage_client = storage.Client.from_service_account_json('webpage/magnetic-clone-404500-14b2b165bd29.json')
 bucket = storage_client.get_bucket('clases_equipo4')
 
+
+lock = threading.Lock()
+img_container = {"img": None}
 
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
@@ -75,13 +79,11 @@ for alumno in reconocidos:
 if 'video_writer' not in st.session_state:
     st.session_state['video_writer'] = None
 
-def callback(frame):
+def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
-
-    flipped = img[::-1,:,:] if flip else img
-
-    return av.VideoFrame.from_ndarray(flipped, format="bgr24")
-    # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    with lock:
+        img_container["img"] = img
+    return frame
     
     # if True:
     #     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
@@ -113,9 +115,36 @@ def callback(frame):
     # return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
 
+
 with col1:
+    ctx = webrtc_streamer(key="example", video_frame_callback=video_frame_callback)
+    fig_place = st.empty()
+    fig, ax = plt.subplots(1, 1)
     flip = st.checkbox("Flip")
-    webrtc_ctx = webrtc_streamer(key="example", rtc_configuration=RTC_CONFIGURATION, video_frame_callback= callback)
+    
+    while ctx.state.playing:
+        with lock:
+            frame = img_container["img"]
+        if frame is None:
+            continue
+        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        rgb_small_frame = small_frame
+        face_locations = face_recognition.face_locations(rgb_small_frame)
+        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+        face_names = []
+        for face_encoding in face_encodings:
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            name = "Unknown"
+            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+            if matches[best_match_index]:
+                name = known_face_names[best_match_index]
+            face_names.append(name)
+        for name in face_names:
+            if name!= "Unknown" and name in st.session_state:
+                st.session_state[name] = True
+        
+        
     # st.write("Cámara en tiempo real con deteccion:")
     # # run = st.checkbox('Run Webcam')
     # FRAME_WINDOW = st.empty()
@@ -134,32 +163,32 @@ with col1:
     #     #     frame_height, frame_width = frame.shape[:2]
     #     #     st.session_state['video_writer'] = cv2.VideoWriter('webpage/output.avi', fourcc, 20.0, (frame_width, frame_height))
         
-    #     if process_this_frame:
-    #         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-    #         rgb_small_frame = small_frame
-    #         face_locations = face_recognition.face_locations(rgb_small_frame)
-    #         face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
-    #         face_names = []
-    #         for face_encoding in face_encodings:
-    #             matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-    #             name = "Unknown"
-    #             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-    #             best_match_index = np.argmin(face_distances)
-    #             if matches[best_match_index]:
-    #                 name = known_face_names[best_match_index]
-    #             face_names.append(name) 
-    #         for (top, right, bottom, left), name in zip(face_locations, face_names):
-    #             top *= 4
-    #             right *= 4
-    #             bottom *= 4
-    #             left *= 4
-    #             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-    #             cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-    #             font = cv2.FONT_HERSHEY_DUPLEX
-    #             cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-    #             for name in face_names:
-    #                 if name!= "Unknown" and name in st.session_state:
-    #                     st.session_state[name] = True
+        # if process_this_frame:
+        #     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        #     rgb_small_frame = small_frame
+        #     face_locations = face_recognition.face_locations(rgb_small_frame)
+        #     face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+        #     face_names = []
+        #     for face_encoding in face_encodings:
+        #         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+        #         name = "Unknown"
+        #         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+        #         best_match_index = np.argmin(face_distances)
+        #         if matches[best_match_index]:
+        #             name = known_face_names[best_match_index]
+        #         face_names.append(name) 
+        #     for (top, right, bottom, left), name in zip(face_locations, face_names):
+        #         top *= 4
+        #         right *= 4
+        #         bottom *= 4
+        #         left *= 4
+        #         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+        #         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+        #         font = cv2.FONT_HERSHEY_DUPLEX
+        #         cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+        #         for name in face_names:
+        #             if name!= "Unknown" and name in st.session_state:
+        #                 st.session_state[name] = True
                         
     #     st.session_state['video_writer'].write(frame)
 
