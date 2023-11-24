@@ -43,6 +43,7 @@ if authentication_status == True:
                 # Section(name="Cool apps", icon=":pig:"),
                 # The pages appear in the order you pass them
                 Page("webpage/paginas/Grupo_1_camara.py", "Grupo 1 camara", "📖"),
+                Page("webpage/paginas/dt_seleccion.py", "jimmylozano", "📖"),
                 # Page("example_app/example_two.py", "Example Two", "✏️"),
                 # Section(name="Other apps", icon=":horse:"),
                 # # Will use the default icon and name based on the filename if you don't
