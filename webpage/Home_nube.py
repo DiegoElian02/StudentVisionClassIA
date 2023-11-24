@@ -11,8 +11,8 @@ from st_pages import Page, Section, add_page_title, show_pages
 st.set_page_config(layout="wide",)
 #--- User auth
         
-names = ["Diego Elian", "Jose Romo", "Ana Cardenas", "Elias Garza"]
-usernames = ["diegoelian02", "joseromo", "anacardenas", "eliasgarza"]
+names = ["Diego Elian", "Jose Romo", "Ana Cardenas", "Elias Garza", "alumno"]
+usernames = ["diegoelian02", "joseromo", "anacardenas", "eliasgarza", "alumno"]
 
 file_path = Path(__file__).parent / "hashed_pw.pkl"
 with file_path.open("rb") as file:
@@ -28,7 +28,7 @@ if authentication_status == False:
 
 if authentication_status == None:
     st.warning("Please enter your username and password")
-    show_pages([Page("webpage/Home.py", "Home", "🏠")])
+    show_pages([Page("webpage/Home_nube.py", "Home", "🏠")])
     
 if authentication_status == True:
     if name == "Diego Elian":
@@ -42,8 +42,8 @@ if authentication_status == True:
                 # The section itself will look like a normal page, but it won't be clickable
                 # Section(name="Cool apps", icon=":pig:"),
                 # The pages appear in the order you pass them
-                Page("webpage/paginas/Grupo_1_camara.py", "Grupo 1 camara", "📖"),
-                Page("webpage/paginas/dt_seleccion.py", "jimmylozano", "📖"),
+                Page("webpage/paginas/Grupo_1_asistencia_online.py", "Grupo 1 camara", "📖"),
+                # Page("webpage/paginas/dt_seleccion.py", "jimmylozano", "📖"),
                 # Page("example_app/example_two.py", "Example Two", "✏️"),
                 # Section(name="Other apps", icon=":horse:"),
                 # # Will use the default icon and name based on the filename if you don't
@@ -65,7 +65,7 @@ if authentication_status == True:
                 # The section itself will look like a normal page, but it won't be clickable
                 # Section(name="Cool apps", icon=":pig:"),
                 # The pages appear in the order you pass them
-                Page("webpage/paginas/Grupo_2_camara.py", "Grupo 2 camara", "📖"),
+                # Page("webpage/paginas/Grupo_2_camara.py", "Grupo 2 camara", "📖"),
                 # Page("example_app/example_two.py", "Example Two", "✏️"),
                 # Section(name="Other apps", icon=":horse:"),
                 # # Will use the default icon and name based on the filename if you don't
@@ -75,8 +75,16 @@ if authentication_status == True:
                 # Page("example_app/example_five.py", "Example Five", "🧰", in_section=False),
             ]
         )
-    
-    
+    if name == "alumno":
+        show_pages(
+            [   
+                Page("webpage/Home.py", "Home", "🏠"),
+                Page("webpage/paginas/Grupo_1_alumno.py", "Grupo 1", "🏠"),
+                # Can use :<icon-name>: or the actual icon
+                Page("webpage/paginas/Grupo_1_estadisticas.py", "Grupo 1 estadísticas", ":books:"),
+            ]
+        )
+
     
     # # Datos ficticios
     # alumnos = ['Juan', 'Pedro', 'María', 'Perla', 'Diego']
