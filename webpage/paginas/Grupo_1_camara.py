@@ -13,7 +13,7 @@ from st_pages import Page, Section, add_page_title, show_pages
 from google.cloud import storage
 
 
-storage_client = storage.Client.from_service_account_json('webpage/magnetic-clone-404500-14b2b165bd29.json')
+storage_client = storage.Client.from_service_account_json('magnetic-clone-404500-14b2b165bd29.json')
 bucket = storage_client.get_bucket('clases_equipo4')
 
 DETAKEY = "b0nuscm7yka_CWJRCsPHdCAkTspwGnHoM7jcg2HPu3Zs"
@@ -35,8 +35,8 @@ def list_files_in_folder(folder_path):
     return file_names
 known_face_encodings = []
 known_face_names = []
-for person in list_files_in_folder('webpage/known_faces'):
-    face = face_recognition.load_image_file(f"webpage/known_faces/{person}")
+for person in list_files_in_folder('known_faces'):
+    face = face_recognition.load_image_file(f"known_faces/{person}")
     face_face_encoding = face_recognition.face_encodings(face)[0]
         
     known_face_encodings.append(face_face_encoding)

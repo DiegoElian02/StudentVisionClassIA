@@ -28,21 +28,21 @@ if authentication_status == False:
 
 if authentication_status == None:
     st.warning("Please enter your username and password")
-    show_pages([Page("webpage/Home_salon.py", "Home", "🏠")])
+    show_pages([Page("Home_salon.py", "Home", "🏠")])
     
 if authentication_status == True:
     if name == "Diego Elian":
         show_pages(
             [
-                Page("webpage/Home_salon.py", "Home", "🏠"),
-                Page("webpage/paginas/Grupo_1.py", "Grupo 1", "🏠"),
+                Page("Home_salon.py", "Home", "🏠"),
+                Page("paginas/Grupo_1.py", "Grupo 1", "🏠"),
                 # Can use :<icon-name>: or the actual icon
-                Page("webpage/paginas/Grupo_1_estadisticas.py", "Grupo 1 estadísticas", ":books:"),
+                Page("paginas/Grupo_1_estadisticas.py", "Grupo 1 estadísticas", ":books:"),
                 # Since this is a Section, all the pages underneath it will be indented
                 # The section itself will look like a normal page, but it won't be clickable
                 # Section(name="Cool apps", icon=":pig:"),
                 # The pages appear in the order you pass them
-                Page("webpage/paginas/Grupo_1_camara.py", "Grupo 1 camara", "📖"),
+                Page("paginas/Grupo_1_camara.py", "Grupo 1 camara", "📖"),
                 # Page("webpage/paginas/dt_seleccion.py", "jimmylozano", "📖"),
                 # Page("example_app/example_two.py", "Example Two", "✏️"),
                 # Section(name="Other apps", icon=":horse:"),
@@ -114,7 +114,7 @@ if authentication_status == True:
     authenticator.logout("Logout", "main")
     
     st.write("Bienvenido al programa de registro de asistencia y participación de estudiantes para tus grupos!")
-    st.image('webpage/figures/IA.jpg', use_column_width= True)
+    st.image('figures/IA.jpg', use_column_width= True)
     # # Dividir la pantalla en dos columnas de igual tamaño
     # col1, col2, col3 = st.columns([2, 1, 1.5])
 
