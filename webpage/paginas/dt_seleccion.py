@@ -319,17 +319,17 @@ webrtc_ctx = webrtc_streamer(
     async_processing=True,
 )
 
-# if st.checkbox("Show the detected labels", value=True):
-#     if webrtc_ctx.state.playing:
-#         labels_placeholder = st.empty()
-#         # NOTE: The video transformation with object detection and
-#         # this loop displaying the result labels are running
-#         # in different threads asynchronously.
-#         # Then the rendered video frames and the labels displayed here
-#         # are not strictly synchronized.
-#         while True:
-#             result = result_queue.get()
-#             labels_placeholder.table(result)
+if st.checkbox("Show the detected labels", value=True):
+    if webrtc_ctx.state.playing:
+        labels_placeholder = st.empty()
+        # NOTE: The video transformation with object detection and
+        # this loop displaying the result labels are running
+        # in different threads asynchronously.
+        # Then the rendered video frames and the labels displayed here
+        # are not strictly synchronized.
+        while True:
+            result = result_queue.get()
+            labels_placeholder.table(result)
 
 st.markdown(
     "This demo uses a model and code from "
