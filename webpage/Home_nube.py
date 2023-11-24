@@ -34,7 +34,7 @@ if authentication_status == True:
     if name == "Diego Elian":
         show_pages(
             [
-                Page("webpage/Home.py", "Home", "🏠"),
+                Page("webpage/Home_nube.py", "Home", "🏠"),
                 Page("webpage/paginas/Grupo_1.py", "Grupo 1", "🏠"),
                 # Can use :<icon-name>: or the actual icon
                 Page("webpage/paginas/Grupo_1_estadisticas.py", "Grupo 1 estadísticas", ":books:"),
@@ -42,7 +42,7 @@ if authentication_status == True:
                 # The section itself will look like a normal page, but it won't be clickable
                 # Section(name="Cool apps", icon=":pig:"),
                 # The pages appear in the order you pass them
-                Page("webpage/paginas/Grupo_1_asistencia_online.py", "Grupo 1 camara", "📖"),
+                Page("webpage/paginas/Grupo_1_asistencia_online.py", "Grupo 1 asistencia", "📖"),
                 # Page("webpage/paginas/dt_seleccion.py", "jimmylozano", "📖"),
                 # Page("example_app/example_two.py", "Example Two", "✏️"),
                 # Section(name="Other apps", icon=":horse:"),
@@ -57,7 +57,7 @@ if authentication_status == True:
     if name == "Elias Garza":
         show_pages(
             [   
-                Page("webpage/Home.py", "Home", "🏠"),
+                Page("webpage/Home_nube.py", "Home", "🏠"),
                 Page("webpage/paginas/Grupo_2.py", "Grupo 2", "🏠"),
                 # Can use :<icon-name>: or the actual icon
                 Page("webpage/paginas/Grupo_2_estadisticas.py", "Grupo 2 estadísticas", ":books:"),
