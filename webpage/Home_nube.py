@@ -78,7 +78,7 @@ if authentication_status == True:
     if name == "alumno":
         show_pages(
             [   
-                Page("webpage/Home.py", "Home", "🏠"),
+                Page("webpage/Home_nube.py", "Home", "🏠"),
                 Page("webpage/paginas/Grupo_1_alumno.py", "Grupo 1", "🏠"),
                 # Can use :<icon-name>: or the actual icon
                 Page("webpage/paginas/Grupo_1_estadisticas.py", "Grupo 1 estadísticas", ":books:"),
