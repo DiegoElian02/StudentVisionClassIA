@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import pandas as pd
 import face_recognition
 from pathlib import Path
 import streamlit_authenticator as stauth
@@ -45,8 +46,16 @@ def _is_raising_hand(keypoints):
     nose = keypoints[0]
     left_hand = keypoints[9]
     right_hand = keypoints[10]
+    right_elbow = keypoints[8]
+    left_elbow = keypoints[7]
+    right_should = keypoints[6]
+    left_should = keypoints[5]
     
-    if(left_hand[1] < nose[1] or right_hand[1] < nose[1]):
+    
+    if(
+        (left_hand[1] < nose[1] and left_hand[1] > 0 and left_elbow[1] < left_should[1]) or
+        (right_hand[1] < nose[1] and right_hand[1] > 0 and right_elbow[1] < right_should[1])
+        ):
         return True
     return False
 
@@ -62,7 +71,7 @@ def _look4face(keypoints):
     
     return (left, up), (right, down)
 
-def _recognize_face(frame, know_faces_dir = r'..\Face Recognition\known_faces'):
+def _recognize_face(frame, know_faces_dir):
     known_face_encodings = []
     known_face_names = []
 
@@ -134,7 +143,8 @@ def count_participations(video_path:str, known_faces_dir:str, fps:float= 30/4, d
                     try:
                         face = cv2.cvtColor(face, cv2.COLOR_RGB2BGR)  
                         cv2.imwrite(f'Face{counter}.jpg', face)
-                        cv2.imwrite(f'Frame{counter}.jpg', no_show_frame)
+                        box_frame = results[0].plot(boxes=True)
+                        cv2.imwrite(f'Frame{counter}.jpg', box_frame)
                         counter += 1
                           
                         face_name = _recognize_face(face, known_faces_dir)
@@ -211,7 +221,7 @@ with col1:
         frame_to_save = frame.copy()
         
         if process_this_frame and iter < 20:
-            small_frame = cv2.resize(frame, (0, 0), fx=0.5, fy=0.5)
+            small_frame = cv2.resize(frame, (0, 0), fx=1, fy=1)
             rgb_small_frame = small_frame
             face_locations = face_recognition.face_locations(rgb_small_frame)
             face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
@@ -227,10 +237,10 @@ with col1:
             
             #adding boxes
             for (top, right, bottom, left), name in zip(face_locations, face_names):
-                top *= 2
-                right *= 2
-                bottom *= 2
-                left *= 2
+                top *= 1
+                right *= 1
+                bottom *= 1
+                left *= 1
                 cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
                 cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
                 font = cv2.FONT_HERSHEY_DUPLEX
@@ -275,9 +285,10 @@ with col2:
 if st.button("Terminar Clase"):
     part_dict = count_participations(video_path = r'output.mp4',
                      known_faces_dir=r'known_faces',
-                     fps=30,
-                     delta_time_part=4)
-    st.write(part_dict)
+                     fps=30/4,
+                     delta_time_part=6)
+    part_df = pd.DataFrame(list(part_dict.items()), columns=['Nombre', 'Participaciones'])
+    st.table(part_df[part_df['Participaciones'] > 0])
     
     for i in part_dict.items():
         if(i[1] > 0):
