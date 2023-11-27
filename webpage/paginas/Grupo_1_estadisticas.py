@@ -17,6 +17,7 @@ DETAKEY = "b0nuscm7yka_CWJRCsPHdCAkTspwGnHoM7jcg2HPu3Zs"
 deta = Deta(DETAKEY)
 db = deta.Base("grupo1_alumnos")
 db2 = deta.Base("grupo1_asistencia")
+db3 = deta.Base("grupo1_participacion")
 
 def fetch_base():
     res = db.fetch()
@@ -38,6 +39,11 @@ data = [{**entry, 'day_of_week': calendar.day_name[datetime.strptime(entry['fech
 alumnos = list(set([item['alumno'] for item in data]))
 
 asistencias = []
+
+data_participaciones = list(db3.fetch({}).items)
+
+data_participaciones = [{**entry, 'day_of_week': calendar.day_name[datetime.strptime(entry['fecha'], "%Y-%m-%d %H:%M:%S").weekday()]} for entry in data_participaciones]
+
 for alumno in alumnos:
     asistencias.append(sum([1 for item in data if item['alumno'] == alumno and item['asistio']]))
 
@@ -65,6 +71,11 @@ def grafica_asistencia_por_dia():
     ax.set_ylabel('Asistencia')
     ax.set_title('Asistencia por día')
     return fig
+
+alumnos_participacion = list(set([item['alumno'] for item in data_participaciones]))
+participaciones = []
+for alumno in alumnos_participacion:
+    participaciones.append(sum([item['participaciones'] for item in data_participaciones if item['alumno'] == alumno]))
 
 def grafica_participaciones():
     fig, ax = plt.subplots()
