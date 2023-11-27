@@ -103,4 +103,4 @@ with col2:
 with col1:
     st.pyplot(grafica_asistencias())
     
-st.table(pd.DataFrame({"Asistencia de hoy" : alumnos_hoy}))
+st.write(st.table(pd.DataFrame({"Asistencia de hoy" : alumnos_hoy})))

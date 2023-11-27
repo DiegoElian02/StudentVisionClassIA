@@ -53,7 +53,7 @@ with col2:
     add_button = st.button('Registrar')
     if add_button and nombre_nuevo:
         nuevo_alumno(matricula_nueva, nombre_nuevo, apellido_nuevo, edad_nuevo, 0, 0)
-        path = f"..//known_faces//{nombre_nuevo}.jpg"
+        path = f"known_faces//{nombre_nuevo}.jpg"
         with open(path, "wb") as file:
             file.write(picture.getvalue())
         # Limpiar campos después de agregar
