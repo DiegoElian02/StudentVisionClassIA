@@ -47,10 +47,14 @@ with col2:
     nombre_nuevo = st.text_input("Nombre del alumno")
     apellido_nuevo = st.text_input("Apellido del alumno")
     edad_nuevo = st.number_input("Edad del alumno", min_value=1, max_value=100, step=1)
+    picture = st.camera_input("Take a picture")
     
     # Botón para agregar alumno
     add_button = st.button('Registrar')
     if add_button and nombre_nuevo:
         nuevo_alumno(matricula_nueva, nombre_nuevo, apellido_nuevo, edad_nuevo, 0, 0)
+        path = f"..//known_faces//{nombre_nuevo}.jpg"
+        with open(path, "wb") as file:
+            file.write(picture.getvalue())
         # Limpiar campos después de agregar
         st.experimental_rerun()

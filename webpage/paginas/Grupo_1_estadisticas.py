@@ -36,6 +36,10 @@ data = list(db2.fetch({}).items)
 
 data = [{**entry, 'day_of_week': calendar.day_name[datetime.strptime(entry['fecha'], "%Y-%m-%d %H:%M:%S").weekday()]} for entry in data]
 
+df_asistencias = pd.DataFrame(data)
+df_asistencias["fecha"] = df_asistencias["fecha"].apply(lambda x: pd.to_datetime(x).date())
+alumnos_hoy = df_asistencias[df_asistencias["fecha"] == datetime.now().date()]["alumno"].unique()
+
 alumnos = list(set([item['alumno'] for item in data]))
 
 asistencias = []
@@ -72,6 +76,9 @@ def grafica_asistencia_por_dia():
     ax.set_title('Asistencia por día')
     return fig
 
+
+
+
 alumnos_participacion = list(set([item['alumno'] for item in data_participaciones]))
 participaciones = []
 alumnos_participacion = list(set([item['alumno'] for item in data_participaciones]))
@@ -95,3 +102,5 @@ with col2:
     
 with col1:
     st.pyplot(grafica_asistencias())
+    
+st.table(pd.DataFrame({"Asistencia de hoy" : alumnos_hoy}))

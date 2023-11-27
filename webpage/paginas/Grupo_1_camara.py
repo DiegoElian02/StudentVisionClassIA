@@ -1,3 +1,4 @@
+st.legacy_caching.clear_cache()
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -16,7 +17,6 @@ from google.cloud import storage
 from ultralytics import YOLO
 from pydantic import BaseModel
 
-
 storage_client = storage.Client.from_service_account_json('magnetic-clone-404500-14b2b165bd29.json')
 bucket = storage_client.get_bucket('clases_equipo4')
 blob = bucket.blob(f'uploads/{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}.mp4')      
@@ -26,7 +26,6 @@ deta = Deta(DETAKEY)
 db = deta.Base("grupo1_alumnos")
 db2 = deta.Base("grupo1_asistencia")
 db3 = deta.Base("grupo1_participacion")
-
 
 def fetch_alumnos():
     res = db.fetch()
