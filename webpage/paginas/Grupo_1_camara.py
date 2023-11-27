@@ -1,5 +1,6 @@
-st.legacy_caching.clear_cache()
+
 import streamlit as st
+# st.legacy_caching.clear_cache()
 import numpy as np
 import pandas as pd
 import face_recognition
