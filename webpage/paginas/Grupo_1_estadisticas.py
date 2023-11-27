@@ -39,9 +39,9 @@ data = [{**entry, 'day_of_week': calendar.day_name[datetime.strptime(entry['fech
 df_asistencias = pd.DataFrame(data)
 df_asistencias["fecha"] = df_asistencias["fecha"].apply(lambda x: pd.to_datetime(x).date())
 alumnos_hoy = df_asistencias[df_asistencias["fecha"] == df_asistencias["fecha"].max()]["alumno"].unique()
-st.write(alumnos_hoy)
+# st.write(alumnos_hoy)
 alumnos = list(set([item['alumno'] for item in data]))
-
+#
 asistencias = []
 
 data_participaciones = list(db3.fetch({}).items)
@@ -100,6 +100,6 @@ with col2:
 with col1:
     st.pyplot(grafica_asistencias())
     
-st.write(list(alumnos_hoy))
-st.table(df_asistencias)
-# st.table(pd.DataFrame({"Asistencia de hoy" : alumnos_hoy}))
+# st.write(list(alumnos_hoy))
+# st.table(df_asistencias)
+st.table(pd.DataFrame({"Asistencia de hoy" : alumnos_hoy}))
