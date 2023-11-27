@@ -74,12 +74,13 @@ def grafica_asistencia_por_dia():
 
 alumnos_participacion = list(set([item['alumno'] for item in data_participaciones]))
 participaciones = []
+alumnos_participacion = list(set([item['alumno'] for item in data_participaciones]))
 for alumno in alumnos_participacion:
     participaciones.append(sum([item['participaciones'] for item in data_participaciones if item['alumno'] == alumno]))
 
 def grafica_participaciones():
     fig, ax = plt.subplots()
-    ax.barh(alumnos, participaciones, color='green')
+    ax.barh(alumnos_participacion, participaciones, color='green')
     ax.set_xlabel('Participaciones')
     ax.set_title('Participación por alumno')
     return fig
