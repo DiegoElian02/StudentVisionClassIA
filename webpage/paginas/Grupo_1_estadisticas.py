@@ -76,9 +76,6 @@ def grafica_asistencia_por_dia():
     ax.set_title('Asistencia por día')
     return fig
 
-
-
-
 alumnos_participacion = list(set([item['alumno'] for item in data_participaciones]))
 participaciones = []
 alumnos_participacion = list(set([item['alumno'] for item in data_participaciones]))
@@ -104,5 +101,5 @@ with col1:
     st.pyplot(grafica_asistencias())
     
 st.write(list(alumnos_hoy))
-
-st.table(pd.DataFrame({"Asistencia de hoy" : alumnos_hoy}))
+st.table(df_asistencias)
+# st.table(pd.DataFrame({"Asistencia de hoy" : alumnos_hoy}))
