@@ -252,11 +252,6 @@ with col1:
                 if(name!= "Unknown" 
                    and name in alumnos 
                    and name not in st.session_state):
-                        print('**********************************************************')
-                        print('**********************************************************')
-                        print(name)
-                        print('**********************************************************')
-                        print('**********************************************************')
                         st.session_state[name] = True
                         registo_dia(name, True, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 0)
                         # st.session_state[f'check_{name}'] = True
